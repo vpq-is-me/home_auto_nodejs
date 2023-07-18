@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Насос питьевой воды</title>
+    <link rel="stylesheet" href="/bootstrap.css" type="text/css" />
+    <script type="text/javascript">
+	 window.onload=()=>{
+	     setInterval(async ()=>{ 
+		const response = await fetch('/jfile',{
+		    method: 'GET',
+		    headers:{'Content-Type':'application/json'}
+		});
+		const text = await response.text();
+		pump_data_obj=JSON.parse(text);
+		let out_table="<table border='2' class=\"table-striped  table-hover table-sm \">"
+		for(let key in pump_data_obj){
+		    out_table+="<tr><td>"+key + "</td>" + "<td>"+pump_data_obj[key] + "</td></tr>"
+		}
+		out_table+="</table>"
+		document.getElementById('refr_part').innerHTML=out_table;
+	     },1000);
+	 }
+     
+
+    </script>
+</head>
+<body>
+    <h1 class="card-header"> Измеренные данные насоса  </h1>
+    <pre id="refr_part"> <%= received_buf %> </pre>
+    <button id="ResetBtn" class="btn btn-outline-primary">Reset</button>
+    <h2> <div id='alarms'>Алармов нет</div></h2>
+    <script type="text/javascript">
+        ResetBtn.onclick=async(e) =>{
+	    let resp=await fetch('/reset_alarm',{
+		method: 'GET',
+		headers:{'Content-Type':'application/json'}
+	    })
+	    let text=await resp.text();
+	}
+    </script>
+</body>
+</html>
