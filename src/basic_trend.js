@@ -2,8 +2,8 @@ async function GetTrendData(){
     let query={
         base:"last",
         direction:"up",
-        amount:5,
-        columns:["id","date","WF_counter"]
+        amount:50,
+        columns:["id","PP_capacity_avg","PP_capacity","TK_volume","PP_RUN_MIN"]
     };
     try {
         const resp = await fetch('/basic_trend_data',{
@@ -13,8 +13,62 @@ async function GetTrendData(){
             },
             body: JSON.stringify(query),
          });
-        let json = await resp.json();
-        console.log(json);  
+        let ch_json = await resp.json();
+
+        new Chart("basic_trend", {
+            type: "line",
+            data: {
+                labels: ch_json.data.id,
+                datasets: [{
+                    label: "PP_capacity_avg",
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.8)",
+                    data: ch_json.data.PP_capacity_avg,
+                    yAxisID: 'y',
+                },
+                {
+                    label: "PP_capacity",
+                    backgroundColor: "rgba(255,0,155,1.0)",
+                    borderColor: "rgba(255,0,155,0.8)",
+                    data: ch_json.data.PP_capacity,
+                    yAxisID: 'y',
+                },
+                {
+                    label: "TK_volume",
+                    backgroundColor: "rgba(0,255,0,1.0)",
+                    borderColor: "rgba(0,255,0,0.8)",
+                    data: ch_json.data.TK_volume,
+                    yAxisID: 'y1',
+                },
+                {
+                    label: "PP_RUN_MIN",
+                    backgroundColor: "rgba(100,0,200,1.0)",
+                    borderColor: "rgba(100,0,200,0.8)",
+                    data: ch_json.data.PP_RUN_MIN,
+                    yAxisID: 'y1',
+                }
+                ]
+            },
+            //bezierCurve: false,
+
+            options: {
+                scales:{
+                    x:{
+                        title:{
+                            color:'red',
+                            display: true,
+                            text: "basic pump trend",
+                        }
+                    }
+                }
+                // animation: true,
+                // tension: 0.4,
+                // animationEasing: "easeInBounce",
+                // bezierCurve:true,
+            }
+        });
+
+        console.log(ch_json);  
     }catch(err){
         console.error("Trend data request error->", err);
     }
@@ -22,21 +76,25 @@ async function GetTrendData(){
 }
 GetTrendData();
 
-const xValues = [50,60,70,80,90,100,110,120,130,140,150];
-const yValues = [7,8,8,9,9,9,10,11,14,14,15];
+// const xValues = [50,60,70,80,90,100,110,120,130,140,150];
+// const yValues = [7,8,8,9,9,9,10,11,14,14,15];
 
-new Chart("basic_trend", {
-  type: "line",  
-  data: {
-    labels: xValues,
-    datasets: [{
-      backgroundColor:"rgba(0,0,255,1.0)",
-      borderColor: "rgba(0,0,255,0.8)",
-      data: yValues
-    }]
-  },
- // options:{...}
-});
+// new Chart("basic_trend", {
+//   type: "line",  
+//   data: {
+//     labels: xValues,
+//     datasets: [{
+//       backgroundColor:"rgba(0,0,255,1.0)",
+//       borderColor: "rgba(0,0,255,0.8)",
+//       data: yValues
+//     }]
+//   },
+//  // options:{...}
+// });
+
+
+
+
 // (async function() {
 //     const data = [
 //       { year: 2010, count: 10 },

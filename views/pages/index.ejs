@@ -31,7 +31,19 @@
     <h1 class="card-header"> Измеренные данные насоса  </h1>
     <pre id="refr_part"> <%= received_buf %> </pre>
     <button id="ResetBtn" class="btn btn-outline-primary">Reset</button>
-	<!-- <div style="width: 800px;"><canvas id="acquisitions"></canvas></div> -->
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Dropdown button
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+    </div>
+
 	<div style="width: 800px;">
 		<canvas id="basic_trend"></canvas>
 	</div>
@@ -49,6 +61,7 @@
 	<!-- <script type="text/javascript" src="http://www.chartjs.org/assets/Chart.js"> </script> -->
 	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> -->
 	<script src="chart.umd.js"></script>
+    <script src="bootstrap.min.js"></script>
 	
 	<script type="module" src="basic_trend.js"></script>
 </body>
