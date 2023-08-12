@@ -5,8 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Насос питьевой воды</title>
-    <!-- <link rel="stylesheet" href="/bootstrap.css" type="text/css" /> -->
     <link rel="stylesheet" href="/bootstrap.min.css" type="text/css" />
+    <style>.dot {
+        height: 7px;
+        width: 50px;
+        background-color: #bbb;
+        border-radius: 3px;
+        display: inline-block;
+      }
+    </style>
+</head>
+<body>
+    <h1 class="card-header"> Текущие данные насоса  </h1>
+    <div id="table_place"> 
+        <table border="2" id="inst_table_id" class="table table-sm table-hover table-bordered">
+            <thead class="table-info">                 
+                <tr>                                
+                <th scope="col">Параметр</th>        
+                <th scope="col">Значение</th>         
+                <th scope="col">График</th>       
+                </tr>                               
+            </thead>
+            <tbody id="inst_tbody_id"> </tbody>
+        </table>
+    </div>
+    <button id="ResetBtn" class="btn btn-outline-primary">Reset</button>
+
+	<div style="width: 800px;">
+		<canvas id="basic_trend"></canvas>
+	</div>
+    <h2> <div id='alarms'>Алармов нет</div></h2>
+
     <script type="text/javascript" src="pp_table.js"></script>
     <script type="text/javascript">
         window.onload = () => {
@@ -21,24 +50,6 @@
             }, 1000);
         }
     </script>
-</head>
-<body>
-    <h1 class="card-header"> Измеренные данные насоса  </h1>
-    <div id="table_place"> </div>
-    <button id="ResetBtn" class="btn btn-outline-primary">Reset</button>
-
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-          Default checkbox
-        </label>
-      </div>
-
-
-	<div style="width: 800px;">
-		<canvas id="basic_trend"></canvas>
-	</div>
-    <h2> <div id='alarms'>Алармов нет</div></h2>
     <script type="text/javascript"> PumpTableDraw();</script>	
     <script type="text/javascript">
         ResetBtn.onclick=async(e) =>{
@@ -53,8 +64,8 @@
 	<!-- <script type="text/javascript" src="http://www.chartjs.org/assets/Chart.js"> </script> -->
 	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> -->
 	<script src="chart.umd.js"></script>
-    <script src="bootstrap.bundle.min.js"></script>
-	
-	<script type="module" src="basic_trend.js"></script>
+    <script src="bootstrap.bundle.min.js"></script>	
+	<!-- <script type="module" src="basic_trend.js"></script> -->
+	<script type="text/javascript" src="basic_trend.js"></script>
 </body>
 </html>

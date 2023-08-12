@@ -1,3 +1,4 @@
+var basic_trends;
 async function GetTrendData(){
     let query={
         base:"last",
@@ -15,33 +16,33 @@ async function GetTrendData(){
          });
         let ch_json = await resp.json();
 
-        new Chart("basic_trend", {
+        basic_trends=new Chart("basic_trend", {
             type: "line",
             data: {
                 labels: ch_json.data.id,
                 datasets: [{
-                    label: "PP_capacity_avg",
+                    label: "pump_capacity_avg",
                     backgroundColor: "rgba(0,0,255,1.0)",
                     borderColor: "rgba(0,0,255,0.8)",
                     data: ch_json.data.PP_capacity_avg,
                     yAxisID: 'y',
                 },
                 {
-                    label: "PP_capacity",
+                    label: "pump_capacity",
                     backgroundColor: "rgba(255,0,155,1.0)",
                     borderColor: "rgba(255,0,155,0.8)",
                     data: ch_json.data.PP_capacity,
                     yAxisID: 'y',
                 },
                 {
-                    label: "TK_volume",
+                    label: "exp_tank_vol",
                     backgroundColor: "rgba(0,255,0,1.0)",
                     borderColor: "rgba(0,255,0,0.8)",
                     data: ch_json.data.TK_volume,
                     yAxisID: 'y1',
                 },
                 {
-                    label: "PP_RUN_MIN",
+                    label: "pp_shortest_work",
                     backgroundColor: "rgba(100,0,200,1.0)",
                     borderColor: "rgba(100,0,200,0.8)",
                     data: ch_json.data.PP_RUN_MIN,
