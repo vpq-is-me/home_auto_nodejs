@@ -1,14 +1,14 @@
 const table_rows={
-    acc_counter:	{val:-1,descr:"Счетчик воды,л",color: "#f00",checked:"checked"},
-    pump_capacity:{val:-1,descr:"Производительность насоса, л/с",color: "#c06",checked:"checked"},
-    pump_capacity_avg:{val:-1,descr:"Производительность \nнасоса средняя,л/с",color: "#30f",checked:"checked"},
-    exp_tank_vol:{val:-1,descr:"Расчетный объем ГА,л",color: "#acf",checked:"unchecked"},
-    alarms:	{val:-1,descr:"Алармы",color: "#fff",checked:"disabled"},
-    last_time:	{val:-1,descr:"Время последней посылки",color: "#cf0",checked:"checked"},
-    pp_work_between_pulses:	{val:-1,descr:"Полное время \nработы насоса,c",color: "#0f3",checked:"checked"},
-    pp_longest_work:	{val:-1,descr:"Длиннейшее включение\nнасоса,с",color: "#c60",checked:"unchecked"},
-    pp_shortest_work:	{val:-1,descr:"Кратчайшее включение\nнасоса,с",color: "#3ff",checked:"checked"},
-    pp_working_at_pulse:	{val:-1,descr:"Время работы насоса\nв момент импульса,с",color: "#fff",checked:"disabled"},
+    acc_counter:	{val:-1,descr:"Счетчик воды,л",color: "#f00",checked:"disabled",DBname:"WF_counter",yscale: "yinf"},
+    pump_capacity:{val:-1,descr:"Производительность насоса, л/с",color: "#c06",checked:"checked",DBname:"PP_capacity",yscale: "y1"},
+    pump_capacity_avg:{val:-1,descr:"Производительность \nнасоса средняя,л/с",color: "#30f",checked:"checked",DBname:"PP_capacity_avg",yscale: "y1"},
+    exp_tank_vol:{val:-1,descr:"Расчетный объем ГА,л",color: "#acf",checked:"unchecked",DBname:"TK_volume",yscale: "y10"},
+    alarms:	{val:-1,descr:"Алармы",color: "#fff",checked:"disabled",DBname:"alarms"},
+    last_time:	{val:-1,descr:"Время последней посылки",color: "#cf0",checked:"disabled",DBname:" ",},
+    pp_work_between_pulses:	{val:-1,descr:"Полное время \nработы насоса,c",color: "#0f3",checked:"checked",DBname:"PP_ON_ACC",yscale: "y20"},
+    pp_longest_work:	{val:-1,descr:"Длиннейшее включение\nнасоса,с",color: "#c60",checked:"unchecked",DBname:"PP_RUN_MAX",yscale: "y20"},
+    pp_shortest_work:	{val:-1,descr:"Кратчайшее включение\nнасоса,с",color: "#3ff",checked:"checked",DBname:"PP_RUN_MIN",yscale: "y20"},
+    pp_working_at_pulse:	{val:-1,descr:"Время работы насоса\nв момент импульса,с",color: "#fff",checked:"disabled",DBname:"PP_RUN_AT_PULSE",yscale: "y20"},
 }
 
 function PumpTableDraw(jpump_data){
@@ -42,10 +42,20 @@ function PumpTableDraw(jpump_data){
  }
 function enable_trend(chk_box){
     let key=chk_box.id.substring(4);
-    table_rows[key].checked=chk_box.checked? "checked" : "unchecked";
-    // alert (key + " " + table_rows[key].checked);
-    basic_trends.data.datasets.slice(1,1);
-    basic_trends.update();
+    if(chk_box.checked){
+        table_rows[key].checked="checked";
+        GetTrendData([key]);
+    }else{
+        table_rows[key].checked="unchecked";
+        let tmp=basic_trends.data.datasets;
+        for(let i=0; i<tmp.length;i++){
+            if(tmp[i].label===key){
+                tmp.splice(i,1);
+                break;
+            }
+        }
+        basic_trends.update();
+    }
 }
 
 
