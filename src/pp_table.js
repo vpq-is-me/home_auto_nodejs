@@ -1,14 +1,14 @@
 const table_rows={
-    acc_counter:	{val:-1,descr:"Счетчик воды,л",color: "#f00",checked:"disabled",DBname:"WF_counter",yscale: "yinf"},
-    pump_capacity:{val:-1,descr:"Производительность насоса, л/с",color: "#c06",checked:"checked",DBname:"PP_capacity",yscale: "y1"},
-    pump_capacity_avg:{val:-1,descr:"Производительность \nнасоса средняя,л/с",color: "#30f",checked:"checked",DBname:"PP_capacity_avg",yscale: "y1"},
-    exp_tank_vol:{val:-1,descr:"Расчетный объем ГА,л",color: "#acf",checked:"unchecked",DBname:"TK_volume",yscale: "y10"},
-    alarms:	{val:-1,descr:"Алармы",color: "#fff",checked:"disabled",DBname:"alarms"},
-    last_time:	{val:-1,descr:"Время последней посылки",color: "#cf0",checked:"disabled",DBname:" ",},
-    pp_work_between_pulses:	{val:-1,descr:"Полное время \nработы насоса,c",color: "#0f3",checked:"checked",DBname:"PP_ON_ACC",yscale: "y20"},
-    pp_longest_work:	{val:-1,descr:"Длиннейшее включение\nнасоса,с",color: "#c60",checked:"unchecked",DBname:"PP_RUN_MAX",yscale: "y20"},
-    pp_shortest_work:	{val:-1,descr:"Кратчайшее включение\nнасоса,с",color: "#3ff",checked:"checked",DBname:"PP_RUN_MIN",yscale: "y20"},
-    pp_working_at_pulse:	{val:-1,descr:"Время работы насоса\nв момент импульса,с",color: "#fff",checked:"disabled",DBname:"PP_RUN_AT_PULSE",yscale: "y20"},
+    WF_counter:	{val:-1,descr:"Счетчик воды,л",color: "#f00",checked:"disabled",yscale: "yinf"},
+    PP_capacity:{val:-1,descr:"Производительность насоса, л/с",color: "#c06",checked:"checked",yscale: "y1"},
+    PP_capacity_avg:{val:-1,descr:"Производительность \nнасоса средняя,л/с",color: "#30f",checked:"checked",yscale: "y1"},
+    TK_volume:{val:-1,descr:"Расчетный объем ГА,л",color: "#acf",checked:"unchecked",yscale: "y10"},
+    alarms:	{val:-1,descr:"Алармы",color: "#fff",checked:"disabled"},
+    last_time:	{val:-1,descr:"Время последней посылки",color: "#cf0",checked:"disabled"},
+    PP_ON_ACC:	{val:-1,descr:"Полное время \nработы насоса,c",color: "#0f3",checked:"checked",yscale: "y20"},
+    PP_RUN_MAX:	{val:-1,descr:"Длиннейшее включение\nнасоса,с",color: "#c60",checked:"unchecked",yscale: "y20"},
+    PP_RUN_MIN:	{val:-1,descr:"Кратчайшее включение\nнасоса,с",color: "#3ff",checked:"checked",yscale: "y20"},
+    PP_RUN_AT_PULSE:{val:-1,descr:"Время работы насоса\nв момент импульса,с",color: "#fff",checked:"disabled",yscale: "y20"},
 }
 
 function PumpTableDraw(jpump_data){
@@ -33,18 +33,19 @@ function PumpTableDraw(jpump_data){
             document.getElementById('inst_tbody_id').appendChild(row);
         }
     } else {   
-        for (let key in pump_data_obj) {
+        for (let key in jpump_data) {
             let dist_cell_id = "cell_" + key.toString();
             dist_cell=document.getElementById(dist_cell_id);
-            if(dist_cell)dist_cell.textContent = pump_data_obj[key];
+            if(dist_cell)dist_cell.textContent = jpump_data[key];
         }
     }    
  }
-function enable_trend(chk_box){
+async function enable_trend(chk_box){
     let key=chk_box.id.substring(4);
     if(chk_box.checked){
         table_rows[key].checked="checked";
-        GetTrendData([key]);
+        let trend_data=await GetTrendData([key]);
+        DrawTrends(trend_data);
     }else{
         table_rows[key].checked="unchecked";
         let tmp=basic_trends.data.datasets;
@@ -59,24 +60,3 @@ function enable_trend(chk_box){
 }
 
 
-// function doalert(checkboxElem) {
-//    if (checkboxElem.checked) {
-//      alert ("hi" + checkboxElem.id);
-//    } else {
-//      alert ("bye");
-//    }
-//  }
-//  var inst_table=document.createElement("table");
-//  inst_table.setAttribute("id","inst_table_id");
-//  inst_table.style.border="2px solid";
-//  inst_table.className="table table-sm table-hover table-bordered"
-//  head_txt = ['Параметр', 'Значение', 'График'];
-//  var tr=inst_table.insertRow(0);
-//  for (var i = 0; i < 3; i++) {            
-//      var divContainer = document.createElement('div');//create a div in every loop            
-//      divContainer.className = 'container';//give it a classname
-//      var td = tr.insertCell();
-//      td.appendChild(document.createTextNode(head_txt[i]));
-//      td.appendChild(divContainer);
-//  }
-// document.getElementById('table_place').appendChild(inst_table);
