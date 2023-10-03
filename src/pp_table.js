@@ -44,8 +44,7 @@ async function enable_trend(chk_box){
     let key=chk_box.id.substring(4);
     if(chk_box.checked){
         table_rows[key].checked="checked";
-        let trend_data=await GetTrendData([key]);
-        DrawTrends(trend_data);
+        await ActivateNewTrend(key);
     }else{
         table_rows[key].checked="unchecked";
         let tmp=basic_trends.data.datasets;
@@ -55,6 +54,7 @@ async function enable_trend(chk_box){
                 break;
             }
         }
+        basic_trends.options.animation.duration=0;
         basic_trends.update();
     }
 }

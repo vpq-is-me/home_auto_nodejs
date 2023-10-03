@@ -65,14 +65,17 @@ unix_client.on('connect', () => {
     }, 1000);
 })
 unix_client.on('data', (msg) => {
-    var jrec = JSON.parse(msg.toString());
-    //TODO vpq !!! parse can throw exception!!!
-    console.log(jrec);
-    if ('tag' in jrec) {
-        if (jrec.tag === 3) {
-            mng_resp.Answer(jrec);
+    try {
+        var jrec = JSON.parse(msg.toString());
+        console.log(jrec);
+        if ('tag' in jrec) {
+            if (jrec.tag === 3) {
+                mng_resp.Answer(jrec);
+            }
+        } else {
+            rec_buf = jrec;
         }
-    } else {
-        rec_buf = jrec;
+    } catch (error) {
+        console.error(error);
     }
 })

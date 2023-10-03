@@ -45,16 +45,16 @@
                 <div class="row">
                     <!-- <div class="d-flex gap-1 bd-highlight justify-content-center">     -->
                     <div class="d-flex gap-1 justify-content-center mx-4">    
-                        <button type="button" class="btn btn-secondary btn-sm">&#x21c7</button>
-                        <button id="chart_btn_L" type="button" class="btn btn-secondary btn-sm">&#x21D0</button>
+                        <button id="chart_btn_LL" type="button" class="btn btn-secondary btn-sm">&#x21c7</button>
+                        <button id="chart_btn_L"  type="button" class="btn btn-secondary btn-sm">&#x21D0</button>
                         <div class="input-group flex-nowrap " style="width: max-content">
                             <input id="end_dtime_picker_id" class="input" style="width: 150px;">
-                            <button type="button" class="btn btn-secondary btn-sm">&#x21B7</button>
+                            <button id="chart_btn_jump" type="button" class="btn btn-secondary btn-sm">&#x21B7</button>
                         </div>                       
-                        <button type="button" class="btn btn-secondary btn-sm">&#x21D2</button>
-                        <button type="button" class="btn btn-secondary btn-sm">&#x21C9</button>
+                        <button id="chart_btn_R" type="button" class="btn btn-secondary btn-sm">&#x21D2</button>
+                        <button id="chart_btn_RR"  type="button" class="btn btn-secondary btn-sm">&#x21C9</button>
                         <div class="px-2">
-                            <button type="button" class="btn btn-secondary btn-sm">&#x21E5</button>
+                            <button id="chart_btn_Last" type="button" class="btn btn-secondary btn-sm">&#x21E5</button>
                         </div>
                     </div>
                 </div>
@@ -97,8 +97,17 @@
 				headers:{'Content-Type':'application/json'}
 			})
 			let text=await resp.text();		
-		}	
+		}
         chart_btn_L.onclick=TrendMoveL;
+        chart_btn_LL.onclick=TrendMoveLL;
+        chart_btn_Last.onclick=TrendMoveLast;
+        chart_btn_R.onclick=TrendMoveR;
+        chart_btn_RR.onclick=TrendMoveRR;
+        chart_btn_jump.onclick=async(e) => {
+            let jump_time=document.getElementById('end_dtime_picker_id').value;
+            TrendJump2time(jump_time);
+        }
+       
     </script>
 	<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js/Chart.min.js"></script> -->
 	<!-- <script type="text/javascript" src="http://www.chartjs.org/assets/Chart.js"> </script> -->
