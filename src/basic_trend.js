@@ -42,7 +42,7 @@ function InitChart(trend_js){
             },
             plugins:{
                 legend:{display:false,},
-                title:{display:true,text: 'her poimi'},
+                title:{display:true,text: 'ne poimi'},
                 afterUpdate: function(chart, args, options){
                     
                         this.options.plugins.title.text=this.data.labels[0].toString();
@@ -66,10 +66,6 @@ function InitChart(trend_js){
             animation:{
                 duration:1000,
                 easing:'easeInOutCubic',
-                // onComplete: function(animation){
-                //      if(!(animation.initial)){
-                //          this.options.plugins.title.text=this.data.labels[0].toString();}
-                // }
             },
             interaction: {
                 mode: 'nearest',
@@ -92,15 +88,6 @@ function InitChart(trend_js){
                     }
                 },
             },
-            // {
-            //     id: 'myEventCatcher',
-            //     beforeEvent(chart, args, pluginOptions) {
-            //       const event = args.event;
-            //       if (event.type === 'mouseout') {
-            //         // process the event
-            //       }
-            //     }
-            // },
         ],
     });
 }
@@ -170,7 +157,30 @@ async function ActivateNewTrend(key){
         columns: [],
     };
     query.columns.push(key);
-    let trend_data=await GetTrendData(query);
+    let trend_data;
+    if(key==='consum_rate'){
+        let data_ds = basic_trends.data.datasets.find((value, index, array)=>{
+            return value.label==="date"
+        });            
+        query.data={"consum_rate":[]}
+        query.data.consum_rate.push(0);//first element actualy has to be calculated with additional previous data. so it will just copy of next 
+        if(data_ds!=undefined){
+            let rate;
+            let factor=1;
+            for(let i=1;i<basic_trends.data.labels.length;i++){
+                rate=data_ds.data[i]-data_ds.data[i-1];
+                if(rate!=0)rate=10*factor/rate;
+                query.data.consum_rate.push(rate);
+            }
+        }else{
+            for(let i=1;i<basic_trends.data.labels.length;i++){
+                query.data.consum_rate.push(0);
+            }            
+        }
+        trend_data=query;
+    }else{//not consum_rate
+        trend_data=await GetTrendData(query);
+    }
     DrawTrends(trend_data);
 }
 //********************************************** */
@@ -275,3 +285,16 @@ async function TrendJump2time(time){
     }
     basic_trends.update();
 }
+// function CalculateTrends(beg_idx,end_idx){
+//     if(beg_idx===undefined)beg_idx=0;
+//     if(end_idx===undefined)end_idx=basic_trends.data.labels.length;
+//     if(table_rows.label[consum_rate].checked==="checked"){
+//         let index = basic_trends.data.datasets.find((value, index, array)=>{
+//             return value.label==="consum_rate"
+//         });
+//         if(index===undefined)
+//     }
+
+    
+
+// }
