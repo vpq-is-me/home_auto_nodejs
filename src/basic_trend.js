@@ -40,12 +40,68 @@ function InitChart(trend_js){
                 y10:{min:0,max:25.0},
                 y20:{min:0,max:25.0},
             },
-            plugins:{legend:{display:false,}},
+            plugins:{
+                legend:{display:false,},
+                title:{display:true,text: 'her poimi'},
+                afterUpdate: function(chart, args, options){
+                    
+                        this.options.plugins.title.text=this.data.labels[0].toString();
+                },
+                tooltip: {
+                    callbacks: {
+                        footer: (tooltipItems) => {
+                            let index = tooltipItems[0].chart.data.datasets.find((value, index, array)=>{
+                                return value.label==="date"
+                            });            
+                            if(index!=undefined){
+                                let tm=new Date(index.data[tooltipItems[0].dataIndex]*1000);
+                                let txt=tm.toLocaleString("ru-RU");
+                                return txt;
+                            }
+                            return '---';
+                          }
+                    }
+                }
+            },
             animation:{
-                duration:0,
-                //TODO vpq !!! add animation when move left-right
-            }
-        }
+                duration:1000,
+                easing:'easeInOutCubic',
+                // onComplete: function(animation){
+                //      if(!(animation.initial)){
+                //          this.options.plugins.title.text=this.data.labels[0].toString();}
+                // }
+            },
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false,
+            },
+                //TODO vpq !!! add animation when scroll left-right
+        },
+        plugins:[
+            {
+                id: 'update lable',
+                beforeUpdate: function(chart, args, options){ 
+                    let index = chart.data.datasets.find((value, index, array)=>{
+                        return value.label==="date"
+                    });            
+                    if(index!=undefined){
+                        let beg_time=new Date(index.data[0]*1000);
+                        let end_time=new Date(index.data[index.data.length-1]*1000);
+                        chart.options.plugins.title.text=beg_time.toLocaleString("ru-RU")+' <---> '+end_time.toLocaleString("ru-RU");
+                    }
+                },
+            },
+            // {
+            //     id: 'myEventCatcher',
+            //     beforeEvent(chart, args, pluginOptions) {
+            //       const event = args.event;
+            //       if (event.type === 'mouseout') {
+            //         // process the event
+            //       }
+            //     }
+            // },
+        ],
     });
 }
 //***************************************************************************** */
@@ -72,7 +128,6 @@ function DrawTrends(trend_js){
         }
     }
     basic_trends.update();   
-    // console.log(trend_js); 
 }
 //********************************************** */
 function hexToRgbA(hex,alpha=1){
@@ -108,7 +163,8 @@ DrawBasicTrandInitial();
 //********************************************** */
 async function ActivateNewTrend(key){
     let query={
-        base:"last",
+        base:"id",
+        id: parseInt(basic_trends.data.labels[0]),
         direction:"up",
         amount:50,
         columns: [],
@@ -145,7 +201,7 @@ async function TrendMove_L_LL(factor){
         tmp=trend_data.data[basic_trends.data.datasets[i].label].concat(basic_trends.data.datasets[i].data);
         basic_trends.data.datasets[i].data=tmp.slice(0,length);
     }
-    basic_trends.update();
+    basic_trends.update('none');//call with 'none' to prevent animation
 }
 //********************************************** */
 function TrendMoveR(){
@@ -176,7 +232,7 @@ async function TrendMove_R_RR(factor){
         tmp=basic_trends.data.datasets[i].data.concat(trend_data.data[basic_trends.data.datasets[i].label]);
         basic_trends.data.datasets[i].data=tmp.slice(add_length);
     }
-    basic_trends.update();
+    basic_trends.update('none');
 }
 
 async function TrendMoveLast(){

@@ -79,3 +79,4 @@ unix_client.on('data', (msg) => {
         console.error(error);
     }
 })
+///TODO add telegramm as alarm receiver !!!!
