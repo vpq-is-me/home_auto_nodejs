@@ -31,7 +31,7 @@ const commands = [
 ];
 // let bot;
 function TGBot_ (){
-    this.id='***REMOVED***';//default is home's bot id
+    this.id='33';//default is home's bot id
     this.bot;
     this.InitTG=()=>{    
         try{
