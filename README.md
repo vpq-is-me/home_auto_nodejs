@@ -1,4 +1,4 @@
-![plot](.description_addons/SystemOverview.png)
+![Alt text](.description_addons/SystemOverview.png?raw=true)
 
 
 NOTES:
